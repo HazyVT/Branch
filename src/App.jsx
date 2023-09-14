@@ -1,18 +1,12 @@
 import { useState } from 'react';
-import './App.css';
-import { Editor } from '@monaco-editor/react';
-import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { Box } from '@chakra-ui/layout';
-import rehypeHighlight from 'rehype-highlight/lib';
-import "highlight.js/styles/github.css";
-import 'katex/dist/katex.min.css'
-
+import { Box, Heading, Icon } from '@chakra-ui/react';
+import { GiThunderBlade } from 'react-icons/gi'
+import { BsTwitter, BsGithub, BsYoutube } from 'react-icons/bs'
+import './App.css'
 
 function App() {
 
+  const [ load, setLoad ] = useState(false);
   const [ md, setMd ] = useState('')
 
   function handle_editor_change(value) {
@@ -21,14 +15,16 @@ function App() {
   
   return (
     <>
-    <Box display='flex' justifyContent={'space-between'}>
-      <Editor height='65vw' width='50vw' defaultLanguage='markdown' theme='vs-dark' onChange={handle_editor_change}/>
-      <Box backgroundColor='#1e1e1e' w='50.1vw' color='white'>
-        <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex, rehypeHighlight]} className='markdown-body' >
-          {md}
-        </ReactMarkdown>
-      </Box>
-    </Box>
+    	<Box>
+    		<Box display='flex' justifyContent='space-around'>
+    			<Icon as={GiThunderBlade} w={8} h={8} margin={2} />
+    			<Box display='flex' w='24' justifyContent='space-around'>
+    				<Icon as={BsTwitter} w={4} h={4} />
+    				<Icon as={BsGithub} w={4} h={4}/>
+    				<Icon as={BsYoutube} w={4} h={4}/>
+    			</Box>
+    		</Box>
+    	</Box>
     </>
   )
 }

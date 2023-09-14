@@ -1,42 +1,5 @@
 * {
-  font-family: 'Courier New', Courier, monospace;
+	background-color: #242424;
+	color: white;	
 }
 
-.markdown-body p {
-  font-size: 1.2rem;
-  margin-bottom: 1vw;
-}
-
-.markdown-body {
-  margin: 2vw;
-}
-
-.markdown-body h1 {
-  font-size: 3rem;
-  margin-top: 1vw;
-  margin-bottom: 1vw;
-}
-
-.markdown-body h2 {
-  font-size: 2.4rem;
-  margin-top: 1vw;
-  margin-bottom: 1vw;
-}
-
-.markdown-body h3 {
-  font-size: 1.8rem;
-}
-
-.markdown-body h4 {
-  font-size: 1.4rem;
-}
-
-.markdown-body pre code{
-  background-color: #1a1a1a;
-  color: white;
-  text-align: left;
-}
-
-.math {
-  font-size: 1.2rem;
-}
