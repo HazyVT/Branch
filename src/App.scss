@@ -1,5 +1,102 @@
+$bg-1: #08203e;
+$bg-2: #557c93;
+
+
 body {
   width: 100vw;
   height: 100vh;
-  background-color: #242424;
+  background: url('https://wallpapercave.com/wp/wp11672391.jpg') no-repeat center center fixed;
+  backdrop-filter: blur(10px);
+  background-blend-mode: multiply;
+  background-color: #484848;
+  background-size: cover;
+  color: white;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+
+  .navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10pt;
+
+    .profile{
+      .pfp {
+        width: 30pt;
+        border-radius: 50%;
+      }
+    }
+
+      
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+    a:hover {
+      text-shadow: 0px 0px 3px white;
+      cursor: pointer;
+    }
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .inner-container {
+      width: 200pt;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .account-container {
+      margin-top: 60pt;
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 60pt;
+        border-radius: 20pt;
+        margin-right: 20pt;
+      }
+
+
+      h1 {
+        margin: 0;
+        font-size: 24pt;
+      }
+    }
+
+    .btn {
+      background-color: teal;
+    }
+
+    .btn:hover {
+      background-color: darkcyan;
+    }
+  }
+
+  h1 {
+    font-weight: 200;
+    font-size: 120pt;
+    margin: 0;
+    margin-top: 24pt;
+  }
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
