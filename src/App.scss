@@ -15,31 +15,44 @@ body {
   margin: 0;
   padding: 0;
 
-  .navbar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10pt;
+  .navbar-container {
+    width: 100vw;
+    overflow-x: hidden;
 
-    .profile{
-      .pfp {
-        width: 30pt;
-        border-radius: 50%;
+    .navbar {
+      display: flex;
+      width: 90vw;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10pt;
+      font-size: 10pt;
+  
+  
+      .profile{
+        .pfp {
+          width: 30pt;
+          border-radius: 50%;
+        }
+      }
+  
+      .input {
+        background-color: white;
+      }
+        
+  
+      a {
+        text-decoration: none;
+        color: white;
+      }
+  
+      a:hover {
+        text-shadow: 0px 0px 3px white;
+        cursor: pointer;
       }
     }
-
-      
-
-    a {
-      text-decoration: none;
-      color: white;
-    }
-
-    a:hover {
-      text-shadow: 0px 0px 3px white;
-      cursor: pointer;
-    }
   }
+
+  
 
   .container {
     display: flex;
@@ -56,8 +69,11 @@ body {
 
     .account-container {
       margin-top: 60pt;
-      display: flex;
       align-items: center;
+      padding: 10pt;
+      background-color: #242424;
+      border-radius: 20px;
+      box-shadow: 0px 0px 40px black;
 
       img {
         width: 60pt;
@@ -83,7 +99,7 @@ body {
 
   h1 {
     font-weight: 200;
-    font-size: 120pt;
+    font-size: 24vw;
     margin: 0;
     margin-top: 24pt;
   }

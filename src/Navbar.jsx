@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { supabase, signInWithDiscord} from "./SupaClient";
-import { Box } from "@mui/material";
+import { Box, Icon, Input, SvgIcon, TextField } from "@mui/material";
+import { AiFillHome, AiOutlineSearch } from 'react-icons/ai'
+import { PiSignOutFill } from 'react-icons/pi'
 
 export default function Navbar({session}) {
 
@@ -10,12 +12,16 @@ export default function Navbar({session}) {
   }
 
   return (
-    <div className="navbar">
-      <Link to={'/'} className="home">Branch</Link>
-      <Link className="profile" to={session ? '/account' : ''} onClick={session ? () => {window.location.href='http://localhost:5174/account'} : () => {signInWithDiscord()}}>{session ? <img className="pfp" src={session.user.user_metadata.avatar_url} /> : 'Login'}</Link>
-      <Box display={session ? 'flex' : 'none'}>
-        <Link onClick={signOut}>Sign Out</Link>
-      </Box>
+    <div className='navbar-container'>
+      <div className="navbar">
+        <Link to={'/'} className="home">Branch</Link>
+        <TextField placeholder="username" variant="outlined" className="input" size='small'/>
+        <Link className="profile" to={session ? '/account' : ''} onClick={session ? () => {console.log('auth')} : () => {signInWithDiscord()}}>{session ? <img className="pfp" src={session.user.user_metadata.avatar_url} /> : 'Login'}</Link>
+        <Box display={session ? 'flex' : 'none'}>
+          <Link onClick={signOut}>Sign Out</Link>
+        </Box>
+      </div>
     </div>
+    
   )
 }
