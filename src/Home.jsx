@@ -1,4 +1,5 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button } from "@chakra-ui/react";
+import { signInWithDiscord } from "./SupaClient";
 
 export default function Home({session}) {
   return (
@@ -9,7 +10,7 @@ export default function Home({session}) {
           <p>A study hub for students. <br />Login to get started.</p>
         </Box>
       </div>
-      <Button variant="contained" className="btn" onClick={session ? () => {console.log('To Branch')} : () => {}}>{session ? 'Go To Branch' : 'Get started with discord'}</Button>
+      <Button colorScheme="teal" marginTop='24pt' onClick={session ? () => {console.log("Go to branch")} : () => {signInWithDiscord()}}>{session ? 'Go to branch' : 'Get started with discord'}</Button>
     </div>
   )
 }

@@ -5,18 +5,20 @@ $bg-2: #557c93;
 body {
   width: 100vw;
   height: 100vh;
-  background: url('https://wallpapercave.com/wp/wp11672391.jpg') no-repeat center center fixed;
+  background: url('https://wallpapercave.com/wp/wp11672391.jpg') no-repeat center center fixed !important;
   backdrop-filter: blur(10px);
   background-blend-mode: multiply;
-  background-color: #484848;
-  background-size: cover;
-  color: white;
+  background-color: #484848 !important;
+  background-size: cover !important;
+  color: white !important;
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
 
   .navbar-container {
     width: 100vw;
+    display: flex;
+    justify-content: center;
     overflow-x: hidden;
 
     .navbar {
@@ -34,11 +36,15 @@ body {
           border-radius: 50%;
         }
       }
-  
+
+
       .input {
-        background-color: white;
+        color: white !important;
+
+        ::placeholder {
+          color: white
+        }
       }
-        
   
       a {
         text-decoration: none;
@@ -99,7 +105,7 @@ body {
 
   h1 {
     font-weight: 200;
-    font-size: 24vw;
+    font-size: 18vw;
     margin: 0;
     margin-top: 24pt;
   }

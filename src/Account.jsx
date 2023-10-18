@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export default function Account({session}) {
@@ -28,7 +28,7 @@ export default function Account({session}) {
         <h1>{name}</h1>
       </Box>
       <Box display={loading ? 'block' : 'none'} marginTop='60pt'>
-        <CircularProgress />
+        <Spinner />
       </Box>
     </div>
   )
