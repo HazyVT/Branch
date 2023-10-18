@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import Home from './Home'
 import './App.scss'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'

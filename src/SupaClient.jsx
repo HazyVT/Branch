@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
-export const supabase = createClient('https://yxwirxrwqppiazubberi.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4d2lyeHJ3cXBwaWF6dWJiZXJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTYwOTkwNzYsImV4cCI6MjAxMTY3NTA3Nn0.260NmDbZgceeHKklsKf9wniMFYqHpXI6q_D2EcLE3Rs')
+export const supabase = createClient('https://uybacwgvozpepdtwekyu.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5YmFjd2d2b3pwZXBkdHdla3l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTc2NDg0MzYsImV4cCI6MjAxMzIyNDQzNn0.8JemoRHIIoxl6jhskP8oquX5O8lmxdIRr3ACvdr9mKI')
 
 export function signInWithDiscord() {
-  const {data, error } = supabase.auth.signInWithOAuth({
+  supabase.auth.signInWithOAuth({
     provider: 'discord',
     options: {
       redirectTo: 'http://localhost:5174/'
