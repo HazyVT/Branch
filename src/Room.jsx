@@ -3,6 +3,9 @@ import { Box, Text, Image, Input, Button } from "@chakra-ui/react";
 import { supabase } from "./SupaClient";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import * as Filter from 'bad-words';
+
+var filter = new Filter();
 
 export function Room({session}) {
   const [ status, setStatus ] = useState('');
@@ -72,7 +75,7 @@ export function Room({session}) {
           sender_id: session.user.id, 
           sender_avatar: session.user.user_metadata.avatar_url, 
           sender_name: session.user.user_metadata.full_name, 
-          message: inputRef.current.value,
+          message: filter.clean(inputRef.current.value),
           dt: new Date()
         },
       })
