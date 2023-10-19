@@ -8,10 +8,10 @@ export function User() {
   const [ name, setName ] = useState('');
   const [ joined, setJoined ] = useState('');
   const [ timeStudied, setTimeStudied ] = useState('');
+  const [ favSubject, setFavSubject ] = useState('');
   const [ loading, setLoading ] = useState(true);
   
   let params = useParams();
-  console.log("User Page: " + params.username);
 
   async function getUserData() {
     await supabase
@@ -28,24 +28,26 @@ export function User() {
       let jnd = new Date(date).toLocaleString().substring(0, 10);
       setJoined(jnd);
       setTimeStudied(user.time_spent_studying);
+      setFavSubject(user.favorite_subject);
       setLoading(false);
     })
   }
 
   useEffect(() => {
     getUserData();
-  })
+  }, [])
   
   return (
     <>
       <div className="container">
       <Box display={loading ? 'none' : 'block'} className="account-container">
-        <Box display={'flex'} alignItems={'center'}> 
+        <Box display={'flex'} alignItems={'center'} justifyContent={'space-evenly'}> 
           <img src={pic} />
           <h1>{name}</h1>
         </Box>
-        <Text marginTop='5pt' display={loading ? 'none' : 'block'}>Joined at: {joined}</Text>
+        <Text marginTop='15pt' display={loading ? 'none' : 'block'}>Joined at: {joined}</Text>
         <Text display={loading ? 'none' : 'block'}>Time spent studying: {timeStudied}</Text>
+        <Text display={loading ? 'none' : 'block'}>Favorite subject: {favSubject}</Text>
       </Box>
       <Box display={loading ? 'block' : 'none'} marginTop='60pt'>
         <Spinner />
