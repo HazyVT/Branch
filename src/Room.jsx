@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import * as Filter from 'bad-words';
 
 var filter = new Filter();
+filter.addWords('bullshit', 'shitcreek', 'zipperhead', 'wetback', 'cocktease', 'niglet', 'niga', 'bitchass', 'poofter')
 
 export function Room({session}) {
   const [ status, setStatus ] = useState('');
@@ -30,7 +31,6 @@ export function Room({session}) {
 
     // Log when message is recieved
     room.current.on('broadcast', {event: 'test'}, (payload) => showMessage(payload));
-
   }, [])
 
   function scrollToBottom() {
@@ -108,10 +108,10 @@ export function Room({session}) {
         <Button colorScheme="purple">Notes</Button>
       </Box>
       <Box id='chat' w={'400pt'} height='550pt' backgroundColor='#242424' boxShadow='0px 0px 40px black' pos='relative' borderRadius='20px' display={showChat ? 'block' : 'none'}>
-        <Box overflowY='scroll' maxHeight='500pt' ref={msgBoxRef}>
+        <Box overflowY='scroll' maxHeight='480pt' ref={msgBoxRef}>
           {msgArray}
         </Box>
-        <Input ref={inputRef} placeholder='' w='350pt' onKeyPress={handleKeyPress} pos='absolute' bottom='5' left='25pt' backgroundColor='#323232' border='none'/>
+        <Input ref={inputRef} autoFocus placeholder='' w='350pt' onKeyPress={handleKeyPress} pos='absolute' bottom='5' left='25pt' backgroundColor='#323232' border='none'/>
       </Box>
       <Box id='music' display={showMusic ? 'block' : 'none'} w='400pt' height='550pt' backgroundColor='#242424' boxShadow='0px 0px 40px black' borderRadius='20px'>
         <Box display='flex' flexDir='column' alignItems='center' marginTop='20pt'>
