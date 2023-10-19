@@ -113,6 +113,14 @@ export function Room({session}) {
         </Box>
         <Input ref={inputRef} placeholder='' w='350pt' onKeyPress={handleKeyPress} pos='absolute' bottom='5' left='25pt' backgroundColor='#323232' border='none'/>
       </Box>
+      <Box id='music' display={showMusic ? 'block' : 'none'} w='400pt' height='550pt' backgroundColor='#242424' boxShadow='0px 0px 40px black' borderRadius='20px'>
+        <Box display='flex' flexDir='column' alignItems='center' marginTop='20pt'>
+          <iframe className="video" src='https://www.youtube.com/embed/jfKfPfyJRdk' />
+          <iframe className='video' src='https://www.youtube.com/embed/M48IEH2cYgA' />
+          <iframe className="video" src='https://www.youtube.com/embed/4xDzrJKXOOY' />
+          <iframe className="video" src='https://www.youtube.com/embed/xl0NMRAnqbA' />
+        </Box>
+      </Box>
     </Box>
   )
 }

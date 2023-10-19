@@ -8,8 +8,8 @@ Branch is a web app to help students study without distractions. Made using Node
 |Account Authentication|&check;|
 |User Search|&check;|
 |User Room Creation|&check;|
-|Music Toggle|&cross;|
+|Music Toggle|&check;|
 |Markdown Editor|&cross;|
 |Storing User Notes|&cross;|
 
-To Do Next: Music Toggle
+To Do Next: Markdown Editor
