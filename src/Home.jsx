@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { Box, Input } from "@chakra-ui/react";
-import { redirect, useHref } from "react-router-dom";
 
 export default function Home({session}) {
 
