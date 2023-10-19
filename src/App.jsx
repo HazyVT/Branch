@@ -5,7 +5,8 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import Navbar from './Navbar'
 import { useEffect, useState } from 'react'
 import { supabase } from './SupaClient'
-import Account from './Account'
+import { Account } from './Account'
+import { User } from './User'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
 					<Routes>
 						<Route path='/' element={<Home session={session} />}/>
 						<Route path='/account' element={<Account session={session} />} />
+						<Route path='/user/:username' element={<User />} />
 					</Routes>
 				</Router>
 			</Box>

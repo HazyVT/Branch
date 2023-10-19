@@ -1,21 +1,23 @@
-/* eslint-disable react/prop-types */
-import { Box, Spinner, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"
 import { supabase } from "./SupaClient";
+import { useEffect, useState } from "react";
+import { Box, Text, Spinner } from '@chakra-ui/react'
 
-export function Account({session}) {
-
+export function User() {
   const [ pic, setPic ] = useState('');
   const [ name, setName ] = useState('');
   const [ joined, setJoined ] = useState('');
   const [ timeStudied, setTimeStudied ] = useState('');
-  const [ loading, setLoading ]  = useState(true);
+  const [ loading, setLoading ] = useState(true);
+  
+  let params = useParams();
+  console.log("User Page: " + params.username);
 
-  async function getData() {
+  async function getUserData() {
     await supabase
     .from('profiles')
     .select()
-    .eq('full_name', session.user.user_metadata.full_name)
+    .eq('full_name', params.username)
     .then((response) => {
       let user = response.data[0];
       console.log(user);
@@ -31,14 +33,12 @@ export function Account({session}) {
   }
 
   useEffect(() => {
-    getData();
-  }, [])
+    getUserData();
+  })
   
-
-
-
   return (
-    <div className="container">
+    <>
+      <div className="container">
       <Box display={loading ? 'none' : 'block'} className="account-container">
         <Box display={'flex'} alignItems={'center'}> 
           <img src={pic} />
@@ -51,5 +51,6 @@ export function Account({session}) {
         <Spinner />
       </Box>
     </div>
+    </>
   )
 }
