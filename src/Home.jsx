@@ -1,8 +1,17 @@
 /* eslint-disable react/prop-types */
-import { Box, Button } from "@chakra-ui/react";
-import { signInWithDiscord } from "./SupaClient";
+import { Box, Input } from "@chakra-ui/react";
+import { redirect, useHref } from "react-router-dom";
 
 export default function Home({session}) {
+
+  function handleKeyPress(e) {
+    let key = e.key;
+    if (key == "Enter") {
+      let rk = e.target.value;
+      window.location.href = 'http://localhost:5174/room/'+rk;
+    }
+  }
+
   return (
     <div className="container">
       <div className="inner-container">
@@ -11,7 +20,7 @@ export default function Home({session}) {
           <p>A study hub for students. <br />Login to get started.</p>
         </Box>
       </div>
-      <Button colorScheme="teal" marginTop='24pt' onClick={session ? () => {console.log("Go to branch")} : () => {signInWithDiscord()}}>{session ? 'Go to branch' : 'Get started with discord'}</Button>
+      <Input w='400pt' backgroundColor='white' color='black' placeholder='Enter room key' onKeyPress={handleKeyPress}/>
     </div>
   )
 }

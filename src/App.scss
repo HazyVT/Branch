@@ -15,6 +15,10 @@ body {
   margin: 0;
   padding: 0;
 
+  ::-webkit-scrollbar-track {
+    background: #242424;
+  }
+
   .navbar-container {
     width: 100vw;
     display: flex;

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from './SupaClient'
 import { Account } from './Account'
 import { User } from './User'
+import { Room } from './Room'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
 						<Route path='/' element={<Home session={session} />}/>
 						<Route path='/account' element={<Account session={session} />} />
 						<Route path='/user/:username' element={<User />} />
+						<Route path='/room/:roomkey' element={<Room session={session}/>} />
 					</Routes>
 				</Router>
 			</Box>
