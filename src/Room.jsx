@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Text, Image, Input, Button, useToast } from "@chakra-ui/react";
-import { getSession, supabase } from "./SupaClient";
+import { supabase } from "./SupaClient";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import * as Filter from 'bad-words';
@@ -15,8 +15,9 @@ export function Room() {
   const [ showChat, setShowChat ] = useState(true);
   const [ showMusic, setShowMusic ] = useState(false);
   const [ showNotes, setShowNotes ] = useState(false);
-  const [ defval, setDefval ] = useState('Take notes here in markdown...');
-  const [ session, setSession ] = useState(null);
+  const [ defval ] = useState('Take notes here in markdown...');
+  const [ session ] = useState(null);
+  const [ time, setTime ] = useState(0);
   const inputRef = useRef();
   const msgBoxRef = useRef();
   const notesRef = useRef();
@@ -42,6 +43,14 @@ export function Room() {
     // Get notes from database
     getNotes();
 
+    // Update time
+    const interval = setInterval(() => {
+      setTime(prevTime => prevTime + 1);
+    }, 1000)
+
+    return () => {clearInterval(interval)}
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function scrollToBottom() {
@@ -51,8 +60,8 @@ export function Room() {
   }
 
   async function getNotes() {
-    const {data, error} = await supabase.auth.refreshSession();
-    const { user, session } = data;
+    const {data} = await supabase.auth.refreshSession();
+    const { user } = data;
     await supabase.from('notes').select('note').eq('id', user.id).then((response) => {
       if (response.data.length > 0) {
         let n = response.data[0].note;
@@ -137,29 +146,66 @@ export function Room() {
       setShowNotes(true);
     }
 
-    function handleEditorMount(editor, monaco) {
+    function handleEditorMount(editor) {
       notesRef.current = editor;
     }
 
     async function handleEditorSave() {
       console.log("Saving...");
+      // Gets the current value of the editor
       let note = notesRef.current.getValue();
 
-      const {data, error} = await supabase.auth.refreshSession();
+      // Gets the user information from the session
+      const {data} = await supabase.auth.refreshSession();
       const { user, session } = data;
 
+      // Stores the note into the database
       supabase
       .from('notes')
       .select('id')
       .eq('id', user.id).then((response) => {
         let data = response.data;
         if (data.length == 0) {
-          supabase.from('notes').insert({id: session.user.id, note: note}).then(() => {toast({title: 'Notes saved', description: 'The notes have been saved.', status: "success", duration: 2000, isClosable: true})})
-          return;
+          supabase.from('notes').insert({id: session.user.id, note: note}).then(() => {
+            toast({
+              title: 'Notes saved', 
+              description: 'The notes have been saved.', 
+              status: "success", 
+              duration: 2000, 
+              isClosable: true
+            })});
         } else if (data.length == 1) {
-          supabase.from('notes').update({note: note}).eq('id', session.user.id).then(() => {toast({title: 'Notes saved', description: 'The notes have been saved.', status: "success", duration: 2000, isClosable: true})})
-          return;
+          supabase.from('notes').update({note: note}).eq('id', session.user.id).then(() => {
+            toast({
+              title: 'Notes saved', 
+              description: 'The notes have been saved.', 
+              status: "success", duration: 2000, 
+              isClosable: true
+            })})
         }
+
+        // Get users time spent studying
+        supabase
+        .from('profiles')
+        .select('time_spent_studying')
+        .eq('id', session.user.id).then((response) => {
+          let tss = response.data[0].time_spent_studying;
+          let nt = tss + time;
+          console.log(nt);
+          supabase.from('profiles').update({time_spent_studying: nt}).eq('id', session.user.id).then(() => {
+            toast({
+              title: "Time Updated",
+              description: 'Time spent studying has been updated',
+              status: "success",
+              duration: 2000,
+              isClosable: true
+            });
+            setTime(0);
+          });
+        })
+
+
+       
       })
     }
 
@@ -188,7 +234,7 @@ export function Room() {
         </Box>
       </Box>
       <Box id='notes' display={showNotes ? 'block' : 'none'} w='400pt' height='550pt' pos='relative' backgroundColor='#242424' boxShadow='0px 0px 40px black' borderRadius='20px'>
-        <Editor defaultLanguage="markdown" defaultValue={defval} theme="vs-dark" onMount={handleEditorMount} onChange={() => {console.log(notesRef.current.getValue())}}/>
+        <Editor defaultLanguage="markdown" defaultValue={defval} theme="vs-dark" onMount={handleEditorMount} />
         <Button pos='absolute' top='0' left='-20' colorScheme="purple" onClick={handleEditorSave}>Save</Button>
       </Box> 
     </Box>

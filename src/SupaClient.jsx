@@ -10,9 +10,3 @@ export function signInWithDiscord() {
     }
   })
 }
-
-export async function getSession() {
-  const { data, error } = await supabase.auth.refreshSession();
-  const { user, session } = data;
-  return session;
-}
