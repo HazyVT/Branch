@@ -1,7 +1,11 @@
 /* eslint-disable react/prop-types */
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Input, Image, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { supabase } from "./SupaClient";
 
 export default function Home({session}) {
+
+  const [ tableArr, setTableArr ] = useState([]);
 
   function handleKeyPress(e) {
     let key = e.key;
@@ -10,6 +14,26 @@ export default function Home({session}) {
       window.location.href = 'http://localhost:5174/room/'+rk;
     }
   }
+
+  useEffect(() => {
+    // Load top 10 users for leaderboard
+    supabase
+    .from('profiles')
+    .select('full_name , avatar_url , time_spent_studying')
+    .order('time_spent_studying', {ascending: false})
+    .limit(10).then((response) => {
+      let data = response.data;
+      for (var x = 0; x < data.length; x++ ) {
+        tableArr.push(
+          <Tr key={x}>
+            <Td><Image src={data[x].avatar_url} w={'36px'} borderRadius='20px'/></Td>
+            <Td>{data[x].full_name}</Td>
+            <Td>{data[x].time_spent_studying}</Td>
+          </Tr>
+        )
+      }
+    })
+  }, [])
 
   return (
     <div className="container">
@@ -20,6 +44,21 @@ export default function Home({session}) {
         </Box>
       </div>
       <Input w='400pt' backgroundColor='white' color='black' placeholder='Enter room key' onKeyPress={handleKeyPress}/>
+      <TableContainer marginTop='100pt' color='white'>
+        <Table variant='simple'>
+          <TableCaption color='white'>Top 10 Leaderboard</TableCaption>
+          <Thead>
+            <Tr>
+              <Th color='white'>Avatar</Th>
+              <Th color='white'>Username</Th>
+              <Th color='white'>Study Time</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {tableArr}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

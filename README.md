@@ -12,6 +12,6 @@ Branch is a web app to help students study without distractions. Made using Node
 |Markdown Editor|&check;|
 |Storing User Notes|&check;|
 |Adding time studied|&check;|
-|Leaderboard on homepage|&cross;|
+|Leaderboard on homepage|&check;|
 
-To Do Next: Leaderboard
+To Do Next: Set Up URL and DNS
