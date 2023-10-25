@@ -114,7 +114,7 @@ export function Room() {
           sender_id: session.user.id, 
           sender_avatar: session.user.user_metadata.avatar_url, 
           sender_name: session.user.user_metadata.full_name, 
-          message: filter.clean(inputRef.current.value),
+          message: inputRef.current.value,
           dt: new Date()
         },
       })
