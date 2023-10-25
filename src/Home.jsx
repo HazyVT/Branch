@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
-import { Box, Input, Image, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Input, Image, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { supabase } from "./SupaClient";
 
 export default function Home({session}) {
 
   const [ tableArr ] = useState([]);
+  const toast = useToast();
 
   function handleKeyPress(e) {
     let key = e.key;
@@ -13,6 +14,37 @@ export default function Home({session}) {
       let rk = e.target.value;
       window.location.href = 'https://branch.mosalim.site/room/'+rk;
     }
+  }
+
+  async function checkAvatarChanges() {
+    // Gets the user information from the session
+    const {data} = await supabase.auth.refreshSession();
+    const { user, session } = data;
+
+    // Get the avatar url of the database
+    supabase
+    .from('profiles')
+    .select('avatar_url')
+    .eq('id', user.id).then((response) => {
+      // Check if they are the same
+      const oldAvatar = response.data[0].avatar_url;
+      console.log(oldAvatar);
+        // Update avatar if changes were made
+      if (oldAvatar != user.user_metadata.avatar_url) {
+        supabase.from('profiles').update({avatar_url: user.user_metadata.avatar_url}).eq('id', user.id).then(() => {
+          console.log("Avatar changed")
+          toast({
+            title: "Avatar Updated",
+            description: "Your avatar has been updated to its new fresh look",
+            status: "success",
+            duration: 4000,
+            isClosable: true
+          })
+        });
+      }
+
+    })
+    console.log(user);
   }
 
   useEffect(() => {
@@ -33,6 +65,10 @@ export default function Home({session}) {
         )
       }
     })
+
+    // Update profile picture if there were changes
+    checkAvatarChanges();
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
