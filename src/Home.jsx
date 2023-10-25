@@ -5,13 +5,13 @@ import { supabase } from "./SupaClient";
 
 export default function Home({session}) {
 
-  const [ tableArr, setTableArr ] = useState([]);
+  const [ tableArr ] = useState([]);
 
   function handleKeyPress(e) {
     let key = e.key;
     if (key == "Enter") {
       let rk = e.target.value;
-      window.location.href = 'http://localhost:5174/room/'+rk;
+      window.location.href = 'https://branch.mosalim.site/room/'+rk;
     }
   }
 
@@ -33,6 +33,7 @@ export default function Home({session}) {
         )
       }
     })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

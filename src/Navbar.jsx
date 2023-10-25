@@ -11,7 +11,7 @@ export default function Navbar({session}) {
 
   async function signOut() {
     await supabase.auth.signOut();
-    window.location.href="http://localhost:5174/"
+    window.location.href="https://branch.mosalim.site"
   }
 
   async function userSearch(e) {
@@ -21,7 +21,7 @@ export default function Navbar({session}) {
       .select('full_name')
       .eq('full_name', inputRef.current.value).then((response) => {
         if (response.data.length > 0) {
-          window.location.href = 'http://localhost:5174/user/' + response.data[0].full_name;
+          window.location.href = 'https://branch.mosalim.site/user/' + response.data[0].full_name;
         }
       })
     }
