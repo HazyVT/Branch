@@ -3,11 +3,11 @@ import { Box, Text, Image, Input, Button, useToast } from "@chakra-ui/react";
 import { supabase } from "./SupaClient";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import * as Filter from 'bad-words';
+//import * as Filter from 'bad-words';
 import { Editor } from "@monaco-editor/react";
 
-var filter = new Filter();
-filter.addWords('bullshit', 'shitcreek', 'zipperhead', 'wetback', 'cocktease', 'niglet', 'niga', 'bitchass', 'poofter')
+//var filter = new Filter();
+//filter.addWords('bullshit', 'shitcreek', 'zipperhead', 'wetback', 'cocktease', 'niglet', 'niga', 'bitchass', 'poofter')
 
 export function Room() {
   const [ status, setStatus ] = useState('');

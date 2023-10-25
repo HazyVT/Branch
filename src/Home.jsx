@@ -44,8 +44,8 @@ export default function Home({session}) {
           <p>A study hub for students. <br />Login to get started.</p>
         </Box>
       </div>
-      <Input w='400pt' backgroundColor='white' color='black' placeholder='Enter room key' onKeyPress={handleKeyPress}/>
-      <TableContainer marginTop='100pt' color='white'>
+      <Input display={session ? 'block' : 'none'} w='400pt' backgroundColor='white' color='black' placeholder='Enter room key' onKeyPress={handleKeyPress}/>
+      <TableContainer marginTop='100pt' color='white' display={session ? 'block' : 'none'}>
         <Table variant='simple'>
           <TableCaption color='white'>Top 10 Leaderboard</TableCaption>
           <Thead>
