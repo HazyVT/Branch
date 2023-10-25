@@ -19,7 +19,7 @@ export default function Home({session}) {
   async function checkAvatarChanges() {
     // Gets the user information from the session
     const {data} = await supabase.auth.refreshSession();
-    const { user, session } = data;
+    const { user } = data;
 
     // Get the avatar url of the database
     supabase
@@ -28,11 +28,9 @@ export default function Home({session}) {
     .eq('id', user.id).then((response) => {
       // Check if they are the same
       const oldAvatar = response.data[0].avatar_url;
-      console.log(oldAvatar);
         // Update avatar if changes were made
       if (oldAvatar != user.user_metadata.avatar_url) {
         supabase.from('profiles').update({avatar_url: user.user_metadata.avatar_url}).eq('id', user.id).then(() => {
-          console.log("Avatar changed")
           toast({
             title: "Avatar Updated",
             description: "Your avatar has been updated to its new fresh look",
@@ -56,11 +54,15 @@ export default function Home({session}) {
     .limit(10).then((response) => {
       let data = response.data;
       for (var x = 0; x < data.length; x++ ) {
+        let time = data[x].time_spent_studying;
+        let minutes = Math.floor(time / 60);
+        let hours = Math.floor(time / 3600);
+        let seconds = time - (minutes * 60);
         tableArr.push(
           <Tr key={x}>
             <Td><Image src={data[x].avatar_url} w={'36px'} borderRadius='20px'/></Td>
             <Td>{data[x].full_name}</Td>
-            <Td>{data[x].time_spent_studying}</Td>
+            <Td>Hours: {hours} <br />Minutes: {minutes} <br />Seconds: {seconds}</Td>
           </Tr>
         )
       }
