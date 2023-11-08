@@ -1,48 +1,80 @@
-/* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
-import { supabase, signInWithDiscord } from "./SupaClient";
-import { Box, Input, InputGroup, InputLeftElement, Icon } from "@chakra-ui/react";
-import { AiOutlineSearch } from 'react-icons/ai';
-import { useRef } from "react";
+import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Avatar, Box, Heading, Icon, Menu, MenuButton, MenuItem, MenuList, Input, InputGroup, InputLeftElement, useMediaQuery } from "@chakra-ui/react";
+import { BsBookFill } from 'react-icons/bs';
+import { RiSearch2Fill } from 'react-icons/ri'
+import { signInWithDiscord, supabase } from './SupaClient';
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function Navbar({session}) {
+export default function Navbar() {
+  
+  const [ avatar, setAvatar ] = useState('');
+  const [ session, setSession ] = useState(null);
+  const usernameref = useRef();
+  const nav = useNavigate();
 
-  const inputRef = useRef();
+  useEffect(() => {
+    // Get user session
+    supabase.auth.getSession().then((response) => {
+      const session = response.data.session;
+      setSession(session);
+      setAvatar(session.user.user_metadata.avatar_url);
+    })
+  }, [])
 
-  async function signOut() {
-    await supabase.auth.signOut();
-    window.location.href="https://branch.mosalim.site"
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    nav('/');
+    window.location.reload()
   }
 
-  async function userSearch(e) {
+  const handleSearch = async (e) => {
+    // On enter press
     if (e.key == "Enter") {
-      await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('full_name', inputRef.current.value).then((response) => {
-        if (response.data.length > 0) {
-          window.location.href = 'https://branch.mosalim.site/user/' + response.data[0].full_name;
+      // Check if user exisrs in profiles
+      await supabase.from('profiles').select().eq('full_name', usernameref.current.value).then((response) => {
+        if (response.error == null && response.data.length > 0) {
+          // A match has been found
+          nav('/user/'+response.data[0].full_name);
         }
       })
     }
   }
 
   return (
-    <div className='navbar-container'>
-      <div className="navbar">
-        <Link to={'/'} className="home">Branch</Link>
-        <Box>
-          <InputGroup>
-            <InputLeftElement><Icon as={AiOutlineSearch} color='gray.500' /></InputLeftElement>
-            <Input ref={inputRef} w={'200pt'} placeholder='username' backgroundColor='white' color='black' onKeyPress={userSearch}/>
-          </InputGroup>
+    <>
+      <Box display='flex' justifyContent='space-between' padding={6}>
+        <Link to='/'>
+        <Box display='flex' alignItems='center'>
+          <Icon as={BsBookFill} w={6} h={6} marginRight={2}/>
+          <Heading size='lg'>Branch</Heading>
         </Box>
-        <Link className="profile" to={session ? '/account' : ''} onClick={session ? () => {console.log('auth')} : () => {signInWithDiscord()}}>{session ? <img className="pfp" src={session.user.user_metadata.avatar_url} /> : 'Login'}</Link>
+        </Link>
+        <InputGroup w='300pt'>
+          <InputLeftElement>
+            <RiSearch2Fill />
+          </InputLeftElement>
+          <Input ref={usernameref} type='text' placeholder='User Search' onKeyPress={handleSearch}/>
+        </InputGroup>
+        <Box display={session ? 'none' : 'flex'} cursor='pointer' onClick={signInWithDiscord}>
+          Login
+        </Box>
         <Box display={session ? 'flex' : 'none'}>
-          <Link onClick={signOut}>Sign Out</Link>
+          <Menu>
+            <MenuButton>
+              <Avatar size='sm' src={avatar}/>
+            </MenuButton>
+            <MenuList>
+              <Link to='/account'><MenuItem>Profile</MenuItem></Link>
+              <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+            </MenuList>
+          </Menu>
         </Box>
-      </div>
-    </div>
-    
+      </Box>
+    </>
   )
+}
+
+Navbar.propTypes = {
+  session: PropTypes.object
 }

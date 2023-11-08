@@ -10,3 +10,11 @@ export function signInWithDiscord() {
     }
   })
 }
+
+export function getSession() {
+  const { data, error } = supabase.auth.getSession();
+  if (data != null && error == null) {
+    const { user, session } = data;
+    return { user, session };
+  }
+}

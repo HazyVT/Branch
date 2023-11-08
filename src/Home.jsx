@@ -1,103 +1,16 @@
-/* eslint-disable react/prop-types */
-import { Box, Input, Image, Table, TableCaption, TableContainer, Tbody, Td, Th, Thead, Tr, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { supabase } from "./SupaClient";
+import { Box, Button, Heading, Image, Text, useMediaQuery } from "@chakra-ui/react";
 
-export default function Home({session}) {
+export default function Home() {
 
-  const [ tableArr ] = useState([]);
-  const toast = useToast();
-
-  function handleKeyPress(e) {
-    let key = e.key;
-    if (key == "Enter") {
-      let rk = e.target.value;
-      window.location.href = 'https://branch.mosalim.site/room/'+rk;
-    }
-  }
-
-  async function checkAvatarChanges() {
-    // Gets the user information from the session
-    const {data} = await supabase.auth.refreshSession();
-    const { user } = data;
-
-    // Get the avatar url of the database
-    supabase
-    .from('profiles')
-    .select('avatar_url')
-    .eq('id', user.id).then((response) => {
-      // Check if they are the same
-      const oldAvatar = response.data[0].avatar_url;
-        // Update avatar if changes were made
-      if (oldAvatar != user.user_metadata.avatar_url) {
-        supabase.from('profiles').update({avatar_url: user.user_metadata.avatar_url}).eq('id', user.id).then(() => {
-          toast({
-            title: "Avatar Updated",
-            description: "Your avatar has been updated to its new fresh look",
-            status: "success",
-            duration: 4000,
-            isClosable: true
-          })
-        });
-      }
-
-    })
-    console.log(user);
-  }
-
-  useEffect(() => {
-    // Load top 10 users for leaderboard
-    supabase
-    .from('profiles')
-    .select('full_name , avatar_url , time_spent_studying')
-    .order('time_spent_studying', {ascending: false})
-    .limit(10).then((response) => {
-      let data = response.data;
-      for (var x = 0; x < data.length; x++ ) {
-        let time = data[x].time_spent_studying;
-        let minutes = Math.floor(time / 60);
-        let hours = Math.floor(time / 3600);
-        let seconds = time - (minutes * 60);
-        tableArr.push(
-          <Tr key={x}>
-            <Td><Image src={data[x].avatar_url} w={'36px'} borderRadius='20px'/></Td>
-            <Td>{data[x].full_name}</Td>
-            <Td>Hours: {hours} <br />Minutes: {minutes} <br />Seconds: {seconds}</Td>
-          </Tr>
-        )
-      }
-    })
-
-    // Update profile picture if there were changes
-    checkAvatarChanges();
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const [ isDesktop ] = useMediaQuery('(min-width: 800px)');
 
   return (
-    <div className="container">
-      <div className="inner-container">
-        <h1>Branch</h1>
-        <Box display={session ? 'none' : 'block'}>
-          <p>A study hub for students. <br />Login to get started.</p>
-        </Box>
-      </div>
-      <Input display={session ? 'block' : 'none'} w='400pt' backgroundColor='white' color='black' placeholder='Enter room key' onKeyPress={handleKeyPress}/>
-      <TableContainer marginTop='100pt' color='white' display={session ? 'block' : 'none'}>
-        <Table variant='simple'>
-          <TableCaption color='white'>Top 10 Leaderboard</TableCaption>
-          <Thead>
-            <Tr>
-              <Th color='white'>Avatar</Th>
-              <Th color='white'>Username</Th>
-              <Th color='white'>Study Time</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {tableArr}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </div>
+    <>
+    <Box display='flex' flexDir='column' alignItems='center' margin={4} backgroundImage={isDesktop ? '/study.png' : 'none'} backgroundSize='contain' backgroundRepeat='no-repeat' backgroundPosition='75%'> 
+      <Heading size='4xl' textAlign='center' marginBottom={'6'}>Welcome to <br /><span className="accent">Branch</span></Heading>
+      <Text textAlign='center' fontWeight={600}>A study hub for students <br />to get work done efficently</Text>
+      <Button marginTop={4} colorScheme="purple">Get Started</Button>
+    </Box>
+    </>
   )
 }
