@@ -16,9 +16,11 @@ export default function Navbar() {
   useEffect(() => {
     // Get user session
     supabase.auth.getSession().then((response) => {
-      const session = response.data.session;
-      setSession(session);
-      setAvatar(session.user.user_metadata.avatar_url);
+      if (response.data.session != null) {
+        const session = response.data.session;
+        setSession(session);
+        setAvatar(session.user.user_metadata.avatar_url);
+      }
     })
   }, [])
 
@@ -54,7 +56,7 @@ export default function Navbar() {
           <InputLeftElement>
             <RiSearch2Fill />
           </InputLeftElement>
-          <Input ref={usernameref} type='text' placeholder='User Search' onKeyPress={handleSearch}/>
+          <Input ref={usernameref} boxShadow={'0px 0px 4px black'} variant='filled' type='text' placeholder='User Search' onKeyPress={handleSearch}/>
         </InputGroup>
         <Box display={session ? 'none' : 'flex'} cursor='pointer' onClick={signInWithDiscord}>
           Login

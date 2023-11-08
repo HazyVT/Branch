@@ -1,78 +1,66 @@
 /* eslint-disable react/prop-types */
-import { Box, Spinner, Text, Input, InputGroup, useToast } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Spinner, Text, Input, Avatar, useToast } from "@chakra-ui/react";
+import {useEffect, useRef, useState} from "react";
 import { supabase } from "./SupaClient";
 
 export function Account() {
 
+  const [ session, setSession ] = useState(null);
   const [ pic, setPic ] = useState('');
   const [ name, setName ] = useState('');
   const [ joined, setJoined ] = useState('');
   const [ timeStudied, setTimeStudied ] = useState('');
-  const toast = useToast();
-  const [ favSubject, setFavSubject ] = useState('Enter Subject');
+  const [ favSubject, setFavSubject ] = useState('');
   const [ loading, setLoading ]  = useState(true);
+  const favsubref = useRef();
+  const toast = useToast();
 
   async function getData() {
-    const { data } = await supabase.auth.refreshSession();
-    const { session } = data;
+    // Get session and user metadata
+    let id;
+    await supabase.auth.getSession().then((response) => {
+      // Check if response has been gotten
+      if (response.data.session != null) {
+        const session = response.data.session;
+        setSession(session);
+        id = session.user.id;
+        setName(session.user.user_metadata.full_name)
+        setPic(session.user.user_metadata.avatar_url);
 
-    await supabase
-    .from('profiles')
-    .select()
-    .eq('full_name', session.user.user_metadata.full_name)
-    .then((response) => {
-      let user = response.data[0];
-      setPic(user.avatar_url);
-      setName(user.full_name);
-      let tc = user.time_created;
-      let date = tc.substr(0, 10);
-      let jnd = new Date(date).toLocaleString().substring(0, 10);
-      setJoined(jnd);
-      let tss = user.time_spent_studying;
-      const time_spent_studying_mintues = Math.floor(tss / 60);
-      const time_spent_studying_hours = Math.floor(tss / 3600);
-      const time_spent_studying_seconds = tss - (time_spent_studying_mintues * 60);
-      setTimeStudied("Hours: " + time_spent_studying_hours + " Minutes: " + time_spent_studying_mintues + " Seconds: " + time_spent_studying_seconds);
-      if (user.favorite_subject != null) {
-        setFavSubject(user.favorite_subject);
-      }
-      setLoading(false);
-    })
-  }
+        // Get data that cant be gotten from user metadata
+        supabase.from('profiles').select().eq('id', id).then((response) => {
+        // If user has been found
+          if (response.data.length > 0) {
+            const data = response.data[0];
 
-  async function setFavoriteSubject(subject) {
-    const { data } = await supabase.auth.refreshSession();
-    const { session } = data;
+            // Get joined date
+            const date = new Date(data.time_created);
+            setJoined(date.toUTCString()); 
 
-    await supabase
-    .from('profiles')
-    .update({favorite_subject: subject})
-    .eq('id', session.user.id).then(() => {
-      toast({
-        title: 'Information updated',
-        description: 'User information has been updated',
-        status: 'success',
-        duration: 2000,
-        isClosable: true
-      })
-    })
-  }
-
-  function handleKeyPress(e) {
-    let key = e.key;
-    if (key == "Enter") {
-      if (e.target.value != "") {
-        setFavoriteSubject(e.target.value);
-      } else {
-        toast({
-          title: 'Incorrect input',
-          description: 'Input has been left blank',
-          status: 'error',
-          duration: 2000,
-          isClosable: true
+            // Get time spent studying
+            const minutes = Math.floor(data.time_spent_studying / 60);
+            const seconds = data.time_spent_studying - minutes * 60;
+            const hours = Math.floor(data.time_spent_studying / 3600);
+            setTimeStudied("Hours: " + hours + " Minutes: " + minutes + " Seconds: " + seconds)
+            setFavSubject(data.favorite_subject);
+            setLoading(false);
+          }
         })
       }
+    })
+  }
+
+  const handleUpdate = async (e) => {
+    if (e.key === "Enter") {
+      const { data, error } = await supabase.from('profiles').update({favorite_subject: favsubref.current.value}).eq('id', session.user.id).then(() => {
+        toast({
+          title: "Favorite subject updated",
+          description: "Your favorite subject has been updated",
+          duration: 5000,
+          isClosable: true,
+          status: "success"
+        })
+      });
     }
   }
 
@@ -85,17 +73,18 @@ export function Account() {
 
   return (
     <div className="container">
-      <Box display={loading ? 'none' : 'block'} className="account-container">
-        <Box display={'flex'} alignItems={'center'} justifyContent={'space-evenly'}> 
-          <img src={pic} />
-          <h1>{name}</h1>
+      <Box display={loading ? 'none' : 'flex'} justifyContent='center'>
+        <Box padding={4}>
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+            <Avatar size='lg' src={pic} />
+            <Text fontWeight={800} fontSize='24pt'>{name}</Text>
+          </Box>
+          <Box marginTop={4}>
+            <Text>Joined at: {joined}</Text>
+            <Text>Study Time: {timeStudied}</Text>
+          </Box>
+          <Input ref={favsubref} variant='filled' boxShadow={'0px 0px 4px'} defaultValue={favSubject} placeholder='Favorite Subject' marginTop={4} onKeyPress={handleUpdate}/>
         </Box>
-        <Text marginTop='15pt' display={loading ? 'none' : 'block'}>Joined at: {joined}</Text>
-        <Text display={loading ? 'none' : 'block'}>Time spent studying: <br />{timeStudied}</Text>
-        <InputGroup marginTop='15pt' display={'flex'} alignItems={'center'} justifyContent={'space-around'}>
-          <Text>Favorite Subject: </Text>
-          <Input variant='flushed' placeholder={favSubject} w={'120pt'} onKeyPress={handleKeyPress}/>
-        </InputGroup>
       </Box>
       <Box display={loading ? 'block' : 'none'} marginTop='60pt'>
         <Spinner />

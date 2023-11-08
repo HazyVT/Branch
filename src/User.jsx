@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { supabase } from "./SupaClient";
 import { useEffect, useState } from "react";
-import { Box, Text, Spinner } from '@chakra-ui/react'
+import {Box, Text, Spinner, Avatar, Input} from '@chakra-ui/react'
 
 export function User() {
   const [ pic, setPic ] = useState('');
@@ -14,21 +14,13 @@ export function User() {
   let params = useParams();
 
   async function getUserData() {
-    await supabase
-    .from('profiles')
-    .select()
-    .eq('full_name', params.username)
-    .then((response) => {
-      let user = response.data[0];
-      console.log(user);
-      setPic(user.avatar_url);
-      setName(user.full_name);
-      let tc = user.time_created;
-      let date = tc.substr(0, 10);
-      let jnd = new Date(date).toLocaleString().substring(0, 10);
-      setJoined(jnd);
-      setTimeStudied(user.time_spent_studying);
-      setFavSubject(user.favorite_subject);
+    await supabase.from('profiles').select().eq('full_name', params.username).then((response) => {
+      if (response.data != null) {
+        const data = response.data[0];
+        console.log(data);
+        setName(data.full_name);
+      }
+
       setLoading(false);
     })
   }
@@ -39,21 +31,25 @@ export function User() {
   }, [])
   
   return (
-    <>
-      <div className="container">
-      <Box display={loading ? 'none' : 'block'} className="account-container">
-        <Box display={'flex'} alignItems={'center'} justifyContent={'space-evenly'}> 
-          <img src={pic} />
-          <h1>{name}</h1>
-        </Box>
-        <Text marginTop='15pt' display={loading ? 'none' : 'block'}>Joined at: {joined}</Text>
-        <Text display={loading ? 'none' : 'block'}>Time spent studying: {timeStudied}</Text>
-        <Text display={loading ? 'none' : 'block'}>Favorite subject: {favSubject}</Text>
-      </Box>
-      <Box display={loading ? 'block' : 'none'} marginTop='60pt'>
-        <Spinner />
-      </Box>
-    </div>
-    </>
+      <>
+        <div className="container">
+          <Box display={loading ? 'none' : 'flex'} justifyContent='center'>
+            <Box padding={4}>
+              <Box display='flex' justifyContent='space-between' alignItems='center'>
+                <Avatar size='lg' src={pic}/>
+                <Text fontWeight={800} fontSize='24pt'>{name}</Text>
+              </Box>
+              <Box marginTop={4}>
+                <Text>Joined at: {joined}</Text>
+                <Text>Study Time: {timeStudied}</Text>
+                <Text>Favorite Subject: {favSubject}</Text>
+              </Box>
+            </Box>
+          </Box>
+          <Box display={loading ? 'block' : 'none'} marginTop='60pt'>
+            <Spinner/>
+          </Box>
+        </div>
+      </>
   )
 }
