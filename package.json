@@ -13,12 +13,16 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "chart.js": "^4.4.0",
     "firebase": "^10.6.0",
     "framer-motion": "^10.16.5",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
+    "react-flow": "^1.0.3",
     "react-icons": "^4.12.0",
-    "react-router-dom": "^6.19.0"
+    "react-router-dom": "^6.19.0",
+    "reactflow": "^11.10.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

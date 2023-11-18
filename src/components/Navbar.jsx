@@ -29,7 +29,7 @@ export default function Navbar() {
 
   return (
     <Box display='flex' justifyContent='center' >
-      <Box display='flex' justifyContent='space-between' padding={4} alignItems='center' w='50vw' h='40pt' bgColor='white' position='fixed' top='0' borderBottomRightRadius={'20px'} borderBottomLeftRadius={'20px'} boxShadow='0px 4px 4px rgba(0,0,0,0.25)'>
+      <Box display='flex' justifyContent='space-between' padding={4} alignItems='center' w='100%' bgColor='white' position='fixed' top='0' borderBottomRightRadius={'20px'} borderBottomLeftRadius={'20px'} boxShadow='0px 4px 4px rgba(0,0,0,0.25)'>
         <Icon onClick={() => {nav('/')}} cursor={"pointer"} as={FaBook} w={6} h={6}/>
         <Box display='flex' w='20%' justifyContent={'space-between'} alignItems='center'>
           <Link to='/auth'><Text display={user === null ? 'block' : 'none'}>Login</Text></Link>

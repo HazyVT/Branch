@@ -12,10 +12,9 @@ function App() {
   const [ arr, setArr ] = useState([]);
 
   return (
-    <Box w='100vw' h='100vh' bgColor='#E8E5EB'>
+    <Box>
       <Router>
-        <Navbar />
-        <Box marginTop={24}>
+        <Box padding={4}>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/auth' element={<Auth />} />
