@@ -28,6 +28,8 @@ export default function Auth() {
 
   function Login() {
 
+    const [ loading, setLoading ] = useState(false);
+
     const handleLogin = () => {
       if (signInEmail.current.value == '' || signInPass.current.value == '') {
         toast({
@@ -38,6 +40,7 @@ export default function Auth() {
           status: 'error'
         })
       } else {
+        setLoading(true);
         signInWithEmailAndPassword(auth, signInEmail.current.value, signInPass.current.value).then(() => {
           // Redirect to home
           nav('/')
@@ -50,7 +53,8 @@ export default function Auth() {
               duration: 5000,
               isClosable: true,
               status: 'error'
-            })
+            });
+            setLoading(false);
           } else {
             toast({
               title: "Login error: " + reason.error,
@@ -58,7 +62,8 @@ export default function Auth() {
               duration: 5000,
               isClosable: true,
               status: 'error'
-            })
+            });
+            setLoading(false);
           }
         })
       }
@@ -84,7 +89,7 @@ export default function Auth() {
                 <Text fontWeight='500' padding={1}>Password</Text>
                 <Input ref={signInPass} type='password' onKeyPress={handleKeyPress}/>
             </Box>
-            <Button marginLeft={8} marginRight={8} bgColor='#CDBDDB' _hover={{bgColor: '#c0add2'}} onClick={() => {handleLogin()}}>Sign In</Button>
+            <Button marginLeft={8} marginRight={8} bgColor='#CDBDDB' _hover={{bgColor: '#c0add2'}} onClick={() => {handleLogin()}} isLoading={loading}>Sign In</Button>
             <Text padding={8} textAlign='center'>Don't have an account? <a style={{color: '#a468d9', cursor: "pointer"}} onClick={() => {setState('register')}}>Register</a></Text>    
         </Box>
       </Box>
@@ -92,6 +97,8 @@ export default function Auth() {
   }
 
   function Register() {
+
+    const [ loading, setLoading ] = useState(false);
 
     const handleRegister = () => {
 
@@ -105,6 +112,7 @@ export default function Auth() {
           status: 'error'
         })
       } else {
+        setLoading(true)
         createUserWithEmailAndPassword(auth, signUpEmail.current.value, signUpPass.current.value).then((userInfo) => {
           console.log(userInfo);
           updateProfile(auth.currentUser, {displayName: signUpUsername.current.value}).then(() => {
@@ -120,7 +128,8 @@ export default function Auth() {
               duration: 5000,
               isClosable: true,
               status: 'error'
-            })
+            });
+            setLoading(false);
           } else {
             toast({
               title: "Login error: " + reason.error,
@@ -128,7 +137,8 @@ export default function Auth() {
               duration: 5000,
               isClosable: true,
               status: 'error'
-            })
+            });
+            setLoading(false);
           }
         })
       }
@@ -157,7 +167,7 @@ export default function Auth() {
                 <Text fontWeight='500' padding={1}>Password</Text>
                 <Input ref={signUpPass} type="password"/>
             </Box>
-            <Button marginLeft={8} marginRight={8} bgColor='#CDBDDB' _hover={{bgColor: '#c0add2'}} onClick={() => {handleRegister()}}>Sign Up</Button>
+            <Button marginLeft={8} marginRight={8} bgColor='#CDBDDB' _hover={{bgColor: '#c0add2'}} onClick={() => {handleRegister()}} isLoading={loading}>Sign Up</Button>
             <Text padding={8} textAlign='center'>Already have an account? <a style={{color: '#a468d9', cursor: "pointer"}} onClick={() => {setState('login')}}>Sign In</a></Text>    
         </Box>
       </Box>

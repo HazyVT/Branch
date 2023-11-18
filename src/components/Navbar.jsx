@@ -38,7 +38,7 @@ export default function Navbar() {
               <MenuButton variant='unstyled' as={IconButton} icon={<FaChevronDown />} ></MenuButton>
               <MenuList display='flex' flexDir='column' alignItems='center'>
                 <Avatar w={8} h={8} margin={2}/>
-                <MenuItem>Profile</MenuItem>
+                <Link to='/profile' style={{width: '100%'}}><MenuItem>Profile</MenuItem></Link>
                 <MenuItem onClick={() => {logout()}}>Logout</MenuItem>
               </MenuList>
             </Menu>
