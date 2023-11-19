@@ -5,6 +5,7 @@ import Auth from './components/Auth';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import Editor from './components/Editor';
 
 
 function App() {
@@ -14,9 +15,9 @@ function App() {
   return (
     <Box>
       <Router>
-        <Box padding={4}>
+        <Box>
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Editor />} />
             <Route path='/auth' element={<Auth />} />
             <Route path='/profile' element={<Profile />} />
           </Routes>
