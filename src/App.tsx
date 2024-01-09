@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/navigation/Navbar";
 import User from "./models/User";
 import { useEffect, useState } from "react";
-import { supabase } from "./models/Client";
+import { channel, supabase } from "./models/Client";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -18,6 +18,7 @@ export default function App() {
     const { data, error } = await supabase.auth.refreshSession();
     if (error == null && data.user != null && data.user.email != undefined) {
       setUser(new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image, data.user.email, data.user.created_at));
+      channel.subscribe();
       setLoading(false);
     } else {
       console.error(error);
@@ -25,9 +26,12 @@ export default function App() {
       setLoading(false);
     }
   }
+
+
   
   useEffect(() => {
     getUserFromSession();
+
   }, [])
 
   return (

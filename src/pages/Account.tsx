@@ -1,8 +1,8 @@
-import { Avatar, Box, Heading, Icon, Input, Text, flexbox } from "@chakra-ui/react";
+import { Avatar, Box, Heading, Icon, Input, Text } from "@chakra-ui/react";
 import { FaCamera } from "react-icons/fa";
 import User from "../models/User";
-import { ChangeEvent, ChangeEventHandler, MutableRefObject, useRef, useState } from "react";
-import { supabase } from "../models/Client";
+import { ChangeEvent, MutableRefObject, useRef, useState } from "react";
+import { channel, supabase } from "../models/Client";
 
 export default function Account(props: {user: User | null}) {
 
@@ -25,7 +25,7 @@ export default function Account(props: {user: User | null}) {
     // Change image
     const file = event.target.files;
     console.log(file);
-    if (file != null) {
+    if (file != null && file.length > 0) {
       // get signed link
       deleteOldPhoto()
       const img = file[0];
@@ -46,6 +46,11 @@ export default function Account(props: {user: User | null}) {
             });
             setImage(url);
             user?.setImage(url);
+            channel.send({
+              type: 'broadcast',
+              event: 'image',
+              payload: { image: url}
+            })
           }
         }
       } else {
@@ -58,14 +63,14 @@ export default function Account(props: {user: User | null}) {
   return (
     <Box display='flex' flexDir='column' alignItems='center'>
       <Box bgColor='red.300' w='100vw' h='30vh' display='flex' justifyContent='center' pos='relative'>
-        <Icon as={FaCamera} pos='absolute' top='26vh' zIndex={3} w={12} h={12} 
-          opacity={showAvatarEdit ? '50%' : '0'} 
+        <Icon as={FaCamera} pos='absolute' top='27vh' color='white' zIndex={3} w={12} h={12} 
+          opacity={showAvatarEdit ? '30%' : '0'} 
           onMouseEnter={() => {setShowAvatarEdit(true)}} 
           onMouseLeave={() => {setShowAvatarEdit(false)}} 
           cursor={"pointer"} 
           onClick={() => {imgref.current.click()}}
         />
-        <Avatar pos='absolute' src={image} size='xl' top='24vh' outline='8px solid white' bgColor='red.300' zIndex={2}/>
+        <Avatar pos='absolute' src={image} size='xl' top='25vh' outline='8px solid white' bgColor='red.300' zIndex={2}/>
         <Input ref={imgref} type='file' display='none' accept=".jpg" onChange={setNewImage}/>
       </Box>
       <Heading marginTop={16}>{user?.getData().name}</Heading>

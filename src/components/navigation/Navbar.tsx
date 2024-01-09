@@ -5,11 +5,18 @@ import Navicon from "./Navicon";
 import { Link } from "react-router-dom";
 import User from "../../models/User";
 import { useState } from "react";
+import { channel } from "../../models/Client";
 
 export default function Navbar(props: {user: User | null}) {
 
   const { colorMode, toggleColorMode } = useColorMode();
-  const [ image ] = useState(props.user?.getData().image)
+  const [ image, setImage ] = useState(props.user?.getData().image);
+
+  const handleImageChange = (payload: { [x: string]: unknown; type?: "broadcast"; event?: string; payload?: {image: string}; }) => {
+    setImage(payload.payload?.image);
+  }
+
+  channel.on('broadcast', { event: 'image'}, (payload) => handleImageChange(payload));
 
 
   return (
