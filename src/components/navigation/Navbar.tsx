@@ -12,7 +12,7 @@ export default function Navbar(props: {user: User | null}) {
   return (
     <Box w='100vw' h='1vh' display='flex' alignItems='center' justifyContent='space-between' padding={12} boxShadow={'0px 3px 3px rgba(0,0,0,0.1)'}>
       <Link to='/'><Text fontSize={24} fontWeight={500}>Branch</Text></Link>
-      <Box display='flex' w='10vw' justifyContent='space-around' marginLeft={-10}>
+      <Box display='flex' w='10vw' justifyContent='space-around'>
         <Icon cursor={"pointer"} as={colorMode === 'light' ? CiDark : CiSun} onClick={toggleColorMode} w={6} h={6} />
         <Navicon icon={PiGithubLogo} />
         <Navicon icon={PiTwitterLogo} />

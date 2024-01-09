@@ -16,8 +16,8 @@ export default function App() {
 
   const getUserFromSession = async () => {
     const { data, error } = await supabase.auth.refreshSession();
-    if (error == null && data.user != null) {
-      setUser(new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image));
+    if (error == null && data.user != null && data.user.email != undefined) {
+      setUser(new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image, data.user.email, data.user.created_at));
       setLoading(false);
     } else {
       console.error(error);
