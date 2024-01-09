@@ -1,6 +1,6 @@
 import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { supabase } from "./Client";
+import { supabase } from "../models/Client";
 
 export default function DataContainer() {
 

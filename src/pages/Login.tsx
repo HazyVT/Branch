@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Input, Text, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
-import { supabase } from "../components/Client";
+import { supabase } from "../models/Client";
 import { MutableRefObject, useRef, useState } from "react";
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     setLoading(true)
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: emailref.current.value,
       password: passref.current.value
     });
