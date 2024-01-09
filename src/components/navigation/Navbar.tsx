@@ -4,10 +4,13 @@ import { PiGithubLogo, PiTwitterLogo, PiYoutubeLogo } from "react-icons/pi";
 import Navicon from "./Navicon";
 import { Link } from "react-router-dom";
 import User from "../../models/User";
+import { useState } from "react";
 
 export default function Navbar(props: {user: User | null}) {
 
   const { colorMode, toggleColorMode } = useColorMode();
+  const [ image, setImage ] = useState(props.user?.getData().image)
+
 
   return (
     <Box w='100vw' h='1vh' display='flex' alignItems='center' justifyContent='space-between' padding={12} boxShadow={'0px 3px 3px rgba(0,0,0,0.1)'}>
@@ -18,7 +21,7 @@ export default function Navbar(props: {user: User | null}) {
         <Navicon icon={PiTwitterLogo} />
         <Navicon icon={PiYoutubeLogo} />
       </Box>
-      <Link to={props.user ? '/account' : '/login'}><Avatar size='sm' bgColor='red.300' /></Link>
+      <Link to={props.user ? '/account' : '/login'}><Avatar size='sm' src={image} bgColor='red.300' /></Link>
     </Box>
   )
 }

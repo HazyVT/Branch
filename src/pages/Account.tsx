@@ -1,7 +1,8 @@
-import { Avatar, Box, Heading, Icon, Input, Text } from "@chakra-ui/react";
+import { Avatar, Box, Heading, Icon, Input, Text, flexbox } from "@chakra-ui/react";
 import { FaCamera } from "react-icons/fa";
 import User from "../models/User";
-import { MutableRefObject, useRef, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, MutableRefObject, useRef, useState } from "react";
+import { supabase } from "../models/Client";
 
 export default function Account(props: {user: User | null}) {
 
@@ -13,9 +14,45 @@ export default function Account(props: {user: User | null}) {
 
   // States
   const [ showAvatarEdit, setShowAvatarEdit ] = useState(false);
-  
-  const setNewImage = () => {
-    //
+  const [ image, setImage ] = useState(user?.getData().image);
+
+  const deleteOldPhoto = async () => {
+    const {error} = await supabase.storage.from('avatars').remove(['avatars/public/'+user?.getData().id+'.png']);
+    console.error(error);
+  }
+
+  const setNewImage = async (event: ChangeEvent<HTMLInputElement>) => {
+    // Change image
+    const file = event.target.files;
+    console.log(file);
+    if (file != null) {
+      // get signed link
+      deleteOldPhoto()
+      const img = file[0];
+      const { data, error } = await supabase.storage.from('avatars').upload('avatars/public/'+user?.getData().id+'.png', img, {
+        cacheControl: '3600',
+        upsert: true
+      });
+      if (error == null) {
+        const path = data?.path;
+        if (path != undefined) {
+          const { data } = await supabase.storage.from('avatars').createSignedUrl(path, 100000000);
+          const url = data?.signedUrl;
+          if (url != undefined) {
+            await supabase.auth.updateUser({
+              data: {
+                image: url
+              }
+            });
+            setImage(url);
+            user?.setImage(url);
+          }
+        }
+      } else {
+        console.error(error);
+      }
+      
+    }
   }
   
   return (
@@ -28,8 +65,8 @@ export default function Account(props: {user: User | null}) {
           cursor={"pointer"} 
           onClick={() => {imgref.current.click()}}
         />
-        <Avatar pos='absolute' size='xl' top='24vh' outline='8px solid white' bgColor='red.300' zIndex={2}/>
-        <Input ref={imgref} type='file' display='none' accept=".png" onChange={setNewImage}/>
+        <Avatar pos='absolute' src={image} size='xl' top='24vh' outline='8px solid white' bgColor='red.300' zIndex={2}/>
+        <Input ref={imgref} type='file' display='none' accept=".jpg" onChange={setNewImage}/>
       </Box>
       <Heading marginTop={16}>{user?.getData().name}</Heading>
       <Text>Created at: {new Date(created_at).toLocaleString('en', {dateStyle: 'medium'})}</Text>

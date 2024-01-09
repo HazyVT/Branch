@@ -33,5 +33,9 @@ export default class User {
     return this.collections;
   }
 
+  setImage(image: string) {
+    this.image = image;
+  }
+
 
 }

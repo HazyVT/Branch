@@ -23,7 +23,8 @@ export default function Login() {
     });
     if (error == null) {
       console.log("successful login");
-      nav('/')
+      nav('/');
+      window.location.reload();
     } else {
       console.error(error);
       setLoading(false);
