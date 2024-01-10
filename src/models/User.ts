@@ -1,5 +1,3 @@
-import Collection from "./Collection";
-
 export default class User {
 
   private id: string;
@@ -7,7 +5,6 @@ export default class User {
   private image: string;
   private email: string;
   private created: string;
-  private collections: Map<string, Collection> = new Map();
   
   constructor(id: string, name: string, image: string, email: string, created: string) {
     this.id = id;
@@ -23,14 +20,6 @@ export default class User {
 
   getCreated() {
     return this.created;
-  }
-
-  addCollection(k: string, v: Collection) {
-    this.collections = new Map(this.collections.set(k, v))
-  }
-  
-  getCollections() {
-    return this.collections;
   }
 
   setImage(image: string) {

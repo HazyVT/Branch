@@ -10,4 +10,4 @@ export const channel = supabase.channel(rand, {
       self: true
     }
   }
-})
+}).subscribe();
