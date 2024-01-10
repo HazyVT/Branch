@@ -1,4 +1,4 @@
-import { Avatar, Box, Heading, Icon, Input, Spinner, Text } from "@chakra-ui/react";
+import { Avatar, Box, Heading, Icon, Input, Text } from "@chakra-ui/react";
 import { FaCamera } from "react-icons/fa";
 import User from "../models/User";
 import { ChangeEvent, MutableRefObject, useRef, useState } from "react";
@@ -19,7 +19,7 @@ export default function Account(props: {user: User | null}) {
   const [ image, setImage ] = useState(user?.getData().image);
 
   const deleteOldPhoto = async () => {
-    const {error} = await supabase.storage.from('avatars').remove(['avatars/public/'+user?.getData().id+'.png']);
+    await supabase.storage.from('avatars').remove(['avatars/public/'+user?.getData().id+'.png']);
   }
 
   const setNewImage = async (event: ChangeEvent<HTMLInputElement>) => {
