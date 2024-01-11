@@ -4,7 +4,9 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import User from "./models/User";
-import { supabase } from "./models/Client";
+import { subToChannel, supabase } from "./models/Client";
+import Login from "./pages/Login";
+import Account from "./pages/Account";
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
       if (error == null) {
         if (data.user != undefined) {
           setUser(new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image, ''));
+          subToChannel(data.user.id);
+          setLoading(false);
         }
       } else {
         console.error(error);
@@ -37,9 +41,11 @@ function App() {
       : 
         <Box marginTop={24}>
           <Router>
-            <Navbar />
+            {user ? <Navbar user={user} /> : ''}
             <Routes>
               <Route path='/' element={<Home user={user} />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/account' element={<Account user={user}/>} />
             </Routes>
           </Router>
         </Box>
