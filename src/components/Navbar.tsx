@@ -1,4 +1,4 @@
-import { Avatar, Box, Heading, Icon } from "@chakra-ui/react";
+import { Avatar, Box, Icon } from "@chakra-ui/react";
 import { IoChatboxEllipses } from "react-icons/io5";
 import { FaUserFriends } from "react-icons/fa";
 
