@@ -19,8 +19,8 @@ export default function Navbar(props: {user: User | null}) {
   selfChannel.on('broadcast', {event: 'image'}, (payload) => handleImageChange(payload))
 
   return (
-    <Box w='100vw' h='10vh' pos='fixed' bottom='0' display='flex' alignItems='center' justifyContent='space-around' padding={4} paddingTop={0} boxShadow={'0px -3px 3px rgba(0,0,0,0.1)'}>
-      <Icon as={IoChatboxEllipses} w={8} h={8}/>
+    <Box w='100vw' h='10vh' pos='fixed' bottom='0' display='flex' alignItems='center' justifyContent='space-around' padding={4} paddingTop={0} boxShadow={'0px -3px 3px rgba(0,0,0,0.1)'} __css={{WebkitTapHighlightColor: 'transparent'}}>
+      <Link to='/chats'><Icon as={IoChatboxEllipses} w={8} h={8}/></Link>
       <Icon as={FaUserFriends} w={8} h={8}/>
       <Link to='/account'><Avatar size='sm' src={image} bgColor='black' /></Link>
     </Box>

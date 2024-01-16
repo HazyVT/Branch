@@ -19,7 +19,9 @@ function App() {
       const { data, error } = await supabase.auth.refreshSession();
       if (error == null) {
         if (data.user != undefined) {
-          setUser(new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image, ''));
+          console.log(data.user);
+          const tempUser = new User(data.user.id, data.user.user_metadata.username, data.user.user_metadata.image, data.user.user_metadata.banner)
+          setUser(tempUser);
           subToChannel(data.user.id);
           setLoading(false);
         }
