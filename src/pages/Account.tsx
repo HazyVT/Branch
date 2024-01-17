@@ -70,6 +70,7 @@ export default function Account(props: {user : User | null}) {
         data: {banner: link}
       });
       setBanner(link);
+      user?.setBanner(link);
     } else {
       console.error
     }

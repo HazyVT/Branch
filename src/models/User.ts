@@ -12,7 +12,9 @@ export default class User {
     this.banner = banner;
   }
 
- 
+  setBanner(banner: string) {
+    this.banner = banner;
+  }
 
   getData() {
     return { id: this.id, name: this.name, image: this.image, banner: this.banner};
