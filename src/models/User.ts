@@ -3,20 +3,22 @@ export default class User {
   private id: string;
   private name: string;
   private image: string;
-  private banner: string;
   
-  constructor(id: string, name: string, image: string, banner: string) {
+  constructor(id: string, name: string, image: string) {
     this.id = id;
     this.name = name;
     this.image = image;
-    this.banner = banner;
   }
 
-  setBanner(banner: string) {
-    this.banner = banner;
+  getId() {
+    return this.id;
   }
 
-  getData() {
-    return { id: this.id, name: this.name, image: this.image, banner: this.banner};
+  getName() {
+    return this.name;
+  }
+
+  getImage() {
+    return this.image;
   }
 }
