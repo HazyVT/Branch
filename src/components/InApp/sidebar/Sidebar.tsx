@@ -1,20 +1,20 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Box, Text } from "@chakra-ui/layout";
-import User from "../../models/User";
-import { supabase } from "../Client";
+import User from "../../../models/User";
+import { supabase } from "../../Client";
 import SidebarButton from "./SidebarButton";
 import { useState } from "react";
-import { AiOutlineHome } from "react-icons/ai";
-import Project from "../../models/Project";
 import { CiFolderOn } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@chakra-ui/button";
+import Project from "../../../models/Project";
+import { Icon } from "@chakra-ui/icon";
 
 
 
-export default function Sidebar(props: {user : User | null, projects: Project[]}) {
+export default function Sidebar(props: {user : User | null, projects: Map<string, Project>}) {
 
-  const [ active, setActive ] = useState('overview');
+  const [ active, setActive ] = useState('projects');
   const nav = useNavigate()
 
   const signOut = async () => {
@@ -34,26 +34,28 @@ export default function Sidebar(props: {user : User | null, projects: Project[]}
         <Box marginTop={8}>
           <Box 
             cursor={"pointer"} 
-            bgColor={active === 'overview' ? 'gray.100' : ''} 
-            padding={2} 
-            borderRadius={'10px'}
-            onClick={() => {setActive('overview'); nav('/')}}
-          >
-            <SidebarButton icon={AiOutlineHome} name={"Overview"} />
-          </Box>
-          <Box 
-            cursor={"pointer"} 
             bgColor={active === 'projects' ? 'gray.100' : ''} 
             padding={2} 
             borderRadius={'10px'}
             marginTop={2}
-            onClick={() => {setActive('projects'); nav('/projects')}}
+            onClick={() => {setActive('projects'); nav('/')}}
           >
             <SidebarButton icon={CiFolderOn} name={"Projects"} />
           </Box>
+          <Text fontWeight={300} marginTop={8}>Projects</Text>
+          <Box marginTop={1}>
+            {[...props.projects.keys()].map((key) => {
+
+              return (
+                <Box key={key} display='flex' alignItems='center' w='fit-content' cursor={"pointer"} onClick={() => {nav('/projects/'+props.projects.get(key)?.getId())}}>
+                  <Icon as={props.projects.get(key)?.getMeta().shape} color={props.projects.get(key)?.getMeta().color}/>
+                  <Text marginLeft={2}>{props.projects.get(key)?.getName()}</Text>
+                </Box>
+              )
+            })}
+          </Box>
         </Box>
         <Button w='100%' bgColor='red.300' color='white' _hover={{bgColor: 'red.400'}} onClick={signOut}>Sign Out</Button>
-
       </Box>
     </Box>
   )
