@@ -1,6 +1,18 @@
 import { Box, Button, Heading, Text } from "@chakra-ui/react";
+import { User } from "../models/user";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Home() {
+export default function Home(props: {user: User | null}) {
+
+    const nav = useNavigate();
+    
+    useEffect(() => {
+        if (props.user != null) {
+            nav('/app')
+        }
+    })
+
     return (
         <Box display='flex' flexDir='column' alignItems='center' marginTop={12}>
             <Heading size='3xl'>Welcome To <Heading as='span' size='3xl' color='secondary.400'>Branch</Heading></Heading>
