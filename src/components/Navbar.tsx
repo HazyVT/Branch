@@ -1,7 +1,8 @@
-import { Avatar, Box, Icon } from "@chakra-ui/react";
+import { Avatar, Box, Icon, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { LuGitBranchPlus } from "react-icons/lu";
 import { User } from "../models/user";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "../models/supabase";
 
 
 export default function Navbar(props: {user: User | null}) {
@@ -23,14 +24,28 @@ export default function Navbar(props: {user: User | null}) {
                     size='sm' 
                     bgColor='primary.main' 
                     w={9} h={9} 
+                    display={user == null ? 'block' : 'none'}
                     cursor={"pointer"} 
-                    onClick={user === null ? 
-                        () => nav('/login')
-                    : 
-                        () => console.log("user is " + user.getData().name)
-                    }
-                    src={user != null ? user.getData().image : ''}
-                    />
+                    onClick={() => {nav('/login')}}
+                />
+                <Menu>
+                    <MenuButton>
+                        <Avatar 
+                            size='sm'
+                            bgColor='primary.main'
+                            w={9} h={9}
+                            display={user != null ? 'block' : 'none'}
+                            src={user?.getData().image}
+                        />
+                    </MenuButton>
+                    <MenuList>
+                        <MenuItem
+                            onClick={signOut}
+                        >Sign Out</MenuItem>
+                    </MenuList>
+                </Menu>
+                
+
             </Box>
         </Box>
     )

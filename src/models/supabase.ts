@@ -2,10 +2,15 @@ import { AuthError, Provider, createClient } from "@supabase/supabase-js";
 
 const supabase = createClient('https://svqubdprnzkhvgwslxzw.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN2cXViZHBybnpraHZnd3NseHp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcxNDg4ODUsImV4cCI6MjAyMjcyNDg4NX0.Hiwb8nFPsZJO4--k0iS0bSCy_8ivhaF4pFLNlV_tSB0');
 
-export async function createUser(email: string, password: string) : Promise<AuthError | null> {
+export async function createUser(email: string, password: string, name: string) : Promise<AuthError | null> {
     const { error } = await supabase.auth.signUp({
         email: email,
-        password: password
+        password: password,
+        options: {
+            data: {
+                username: name
+            }
+        }
     })
 
     return error;
@@ -25,6 +30,11 @@ export async function signInWithOauth(provider: Provider) : Promise<AuthError | 
         provider: provider
     })
 
+    return error;
+}
+
+export async function signOut() : Promise<AuthError | null> {
+    const { error } = await supabase.auth.signOut();
     return error;
 }
 

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { User } from "./models/user";
 import Login from "./pages/Login";
 import { getUser } from "./models/supabase";
+import Register from "./pages/Register";
 
 function App() {
 
@@ -15,7 +16,9 @@ function App() {
     useEffect(() => {
         getUser().then((response) => {
             if (response != undefined && response.user != undefined && response.user.email != undefined) {
-                setUser(new User(response.user.user_metadata.full_name, response.user.id, response.user.email, response.user.user_metadata.avatar_url));
+                setUser(new User(response.user.user_metadata.username, response.user.id, response.user.email, response.user.user_metadata.avatar_url));
+                setLoading(false);
+            } else {
                 setLoading(false);
             }
         })
@@ -30,6 +33,7 @@ function App() {
                         <Routes>
                             <Route path='/' element={<Home user={user}/>} />
                             <Route path='/login' element={<Login />} />
+                            <Route path='/register' element={<Register />} />
                         </Routes>
                     </Router>
                 </Box>
